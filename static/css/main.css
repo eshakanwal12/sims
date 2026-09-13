@@ -1,0 +1,18 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Outfit:wght@100..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&display=swap');
+    *{
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+    :root{
+        --primary-color: #f0e2e2;
+        --secondary-color: #FFD6E0;
+        --accent-color: #FFBEFB;
+        --text-color: #000;
+        --btn-hover-color: #DC95FF;
+        --bgcolor: #ffff;
+        --font-primary: 'Outfit', sans-serif;
+        --font-secondary: 'DM Serif Display', serif;
+    }
+   

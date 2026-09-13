@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://kit.fontawesome.com/yourcode.js" crossorigin="anonymous"></script>
+    <title>Login Page</title>
+    <link rel="stylesheet" href="/assets/css/login.css">
+    <link rel="stylesheet" href="/assets/css/main.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<style>
+
+</style>
+
+<body>
+    <div class="login-container">
+        <h2>Login Form</h2>
+        <span> Stock and Inventory Management System</span>
+        <!-- <form action=""> -->
+        <form action="#" id="form">
+            <div class="input">
+                <input id="user" type="text" placeholder="username/Email">
+                <div class="password">
+                    <input type="password" id="password" placeholder="Password">
+                    <i id="eye" class="fa-regular fa-eye"></i>
+                </div>
+            </div>
+            <div class="checkbox">
+                <input type="checkbox">
+                <label for="remember">Remember me</label>
+            </div>
+            <button type="submit">Submit</button>
+
+            <p id="errorMessage"></p>
+            <p>Don't have an account? <a href="#">Sign up</a></p>
+        </form>
+    </div>
+</body>
+<script>
+    let form = document.getElementById("form");
+    let eye = document.getElementById("eye");
+    let password = document.getElementById("password");
+    let user = document.getElementById("user");
+    let errorMessage = document.getElementById("errorMessage");
+    eye.addEventListener("click", () => {
+        if (password.type === "password") {
+            password.type = "text";
+            eye.classList.remove("fa-eye");
+            eye.classList.add("fa-eye-slash");
+        } else {
+            password.type = "password";
+            eye.classList.remove("fa-eye-slash");
+            eye.classList.add("fa-eye");
+        }
+    });
+
+    
+    form.addEventListener("submit", (event) => {
+        event.preventDefault();
+        if (user.value.trim() === "" || password.value.trim() === "") {
+            errorMessage.innerHTML = "Invalid username/passsword";
+            return;
+        }
+    
+    if (user.value.includes("@") && !user.value.includes(".")) {
+        errorMessage.innerHTML = "invalid email";
+        return;
+    }
+    errorMessage.textContent = "valid credentials";
+    errorMessage.style.color = "green";
+     });
+    </script>
+
+</html>
