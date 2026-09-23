@@ -426,22 +426,22 @@
         </div>
 
         <nav class="navigation">
-            <a href="/static/templates/dashboard.html" class="nav-link active">
+            <a href="{{ url_for('dashboard') }}" class="nav-link active">
                 <span>▣</span>
                 Dashboard
             </a>
 
             <div class="nav-section">
                 <p class="section-title">Inventory</p>
-                <a href="/static/templates/products.html" class="nav-link">
+                <a href="{{ url_for('products') }}" class="nav-link">
                     <span>▦</span>
                     Products
                 </a>
-                <a href="/static/templates/categories.html" class="nav-link">
+                <a href="{{ url_for('categories') }}" class="nav-link">
                     <span>▤</span>
                     Categories
                 </a>
-                <a href="/static/templates/stock.html" class="nav-link">
+                <a href="{{ url_for('stock') }}" class="nav-link">
                     <span>▤</span>
                     Stock
                 </a>
@@ -449,15 +449,15 @@
 
             <div class="nav-section">
                 <p class="section-title">Sales</p>
-                <a href="/static/templates/sales.html" class="nav-link">
+                <a href="{{ url_for('sales') }}" class="nav-link">
                     <span>+</span>
                     New Sale
                 </a>
-                <a href="/static/templates/sales_history.html" class="nav-link">
+                <a href="{{ url_for('sales_history') }}" class="nav-link">
                     <span>▤</span>
                     Sales History
                 </a>
-                <a href="/static/templates/customers.html" class="nav-link">
+                <a href="{{ url_for('customers') }}" class="nav-link">
                     <span>♙</span>
                     Customers
                 </a>
@@ -465,7 +465,7 @@
 
             <div class="nav-section">
                 <p class="section-title">System</p>
-                <a href="/static/templates/settings.html" class="nav-link">
+                <a href="{{ url_for('settings') }}" class="nav-link">
                     <span>⚙</span>
                     Settings
                 </a>
@@ -533,7 +533,7 @@
                         <h3>Recent Sales</h3>
                         <p>Latest transactions</p>
                     </div>
-                    <a href="/static/templates/sales_history.html" class="view-link">View All</a>
+                    <a href="{{ url_for('sales_history') }}" class="view-link">View All</a>
                 </div>
 
                 <div class="table-container">
@@ -565,7 +565,7 @@
                         <h3>Low Stock</h3>
                         <p>Products requiring attention</p>
                     </div>
-                    <a href="/stock" class="view-link">View All</a>
+                    <a href="{{ url_for('stock') }}" class="view-link">View All</a>
                 </div>
 
                 <div class="stock-list">
@@ -595,7 +595,7 @@
                     </div>
                 </a>
 
-                <a href="/sale" class="action-btn">
+                <a href="{{ url_for('sales') }}" class="action-btn">
                     <span>＋</span>
                     <div>
                         <strong>New Sale</strong>

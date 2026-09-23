@@ -4,7 +4,6 @@ from werkzeug.security import generate_password_hash, check_password_hash
 import config
 import os
 
-# Templates are kept alongside the static assets in this project.
 template_dir = os.path.abspath(
     os.path.join(os.path.dirname(__file__), "static", "templates")
 )
@@ -403,7 +402,50 @@ def dashboard_stats():
 
 @app.route("/categories")
 def categories():
+    if "user_id" not in session:
+        return redirect(url_for("home"))
+
     return render_template("categories.html")
+
+
+@app.route("/stock")
+def stock():
+    if "user_id" not in session:
+        return redirect(url_for("home"))
+
+    return render_template("stock.html")
+
+
+@app.route("/sales")
+def sales():
+    if "user_id" not in session:
+        return redirect(url_for("home"))
+
+    return render_template("sales.html")
+
+
+@app.route("/sales-history")
+def sales_history():
+    if "user_id" not in session:
+        return redirect(url_for("home"))
+
+    return render_template("sales_history.html")
+
+
+@app.route("/customers")
+def customers():
+    if "user_id" not in session:
+        return redirect(url_for("home"))
+
+    return render_template("customers.html")
+
+
+@app.route("/settings")
+def settings():
+    if "user_id" not in session:
+        return redirect(url_for("home"))
+
+    return render_template("settings.html")
 
 
 # =========================
@@ -754,43 +796,43 @@ def products():
 # =========================
 
 
-@app.route("/api/products", methods=["GET"])
+@app.route("/api/products",methods=["GET"])
 def get_products():
 
-    db = get_db_connection()
-    cursor = db.cursor(dictionary=True)
+    db = get_db_connection
+    cursor=db.cursor(dictionary=True)
 
-    query = """
+    qurey="""
         SELECT
             products.id,
             products.product_name,
             products.sku,
             products.category_id,
-            categories.name AS category_name,
-            products.purchase_price,
+            categories.name As category_name,
+            products.purshase_price,
             products.selling_price,
             products.stock_quantity,
             products.minimum_stock,
             products.description,
-            products.created_at,
+            products.created_at.
             products.updated_at
-        FROM products
-        INNER JOIN categories
+        FROM products 
+        INNER JOIN categories 
             ON products.category_id = categories.id
-        ORDER BY products.id DESC
+        ORDER BY product.id DESC 
     """
 
     try:
 
-        cursor.execute(query)
+        cursor.execute(qurey)
 
-        products = cursor.fetchall()
+        products=cursor.fetchall()
 
         return jsonify(products), 200
-
+    
     except mysql.connector.Error as error:
 
-        return jsonify({"success": False, "message": str(error)}), 500
+        return jsonify({"success":False, "message":str(error)}),500
 
     finally:
 
@@ -900,15 +942,15 @@ def add_product():
 # =========================
 
 
-@app.route("/api/products/<int:product_id>", methods=["GET"])
+@app.route("/api/products/<int:product_id>" ,methods=["GET"])
 def get_product(product_id):
 
     db = get_db_connection()
     cursor = db.cursor(dictionary=True)
 
-    query = """
+    qurey = """
         SELECT
-            products.id,
+            products_id,
             products.product_name,
             products.sku,
             products.category_id,
@@ -923,24 +965,24 @@ def get_product(product_id):
         FROM products
         INNER JOIN categories
             ON products.category_id = categories.id
-        WHERE products.id = %s
+        WHERE products.id=%s
     """
 
     try:
 
-        cursor.execute(query, (product_id,))
+        cursor.execute(qurey,(product_id,))
 
         product = cursor.fetchone()
 
         if not product:
 
-            return jsonify({"success": False, "message": "Product not found"}), 404
+            return jsonify({"success":False,"message":"product not found."}),404
 
-        return jsonify({"success": True, "product": product}), 200
+        return jsonify({"success":True,"product":product}),200
 
     except mysql.connector.Error as error:
 
-        return jsonify({"success": False, "message": str(error)}), 500
+        return jsonify({"success":False, "message":str(error)}), 500
 
     finally:
 
@@ -951,6 +993,3 @@ def get_product(product_id):
 # =========================
 # Update Product
 # =========================
-
-if __name__ == "__main__":
-    app.run(debug=True)
