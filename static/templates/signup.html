@@ -1,0 +1,150 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sign-Up SIMS</title>
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/style.css') }}"
+    />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/login.css') }}"
+    />
+  <link rel="stylesheet" href="/css/login.css">
+  </head>
+  <style>
+    .password_req {
+      text-align: left;
+    }
+    .password_req span {
+      color: red;
+    }
+  </style>
+  <body>
+    <div class="login-container">
+      <h2>Sign-Up Form</h2>
+      <span>Stock & Inventory management system</span>
+      <form action="#" id="form">
+        <input id="username" type="text" placeholder="Username" />
+        <input id="name" type="text" placeholder="Full Name" />
+        <input id="email" type="email" placeholder="Email" />
+        <input id="phone" type="tel" placeholder="Phone" />
+        <input id="password" type="password" placeholder="Password" />
+
+        <div class="password_req">
+          <span id="lengthcheck">x length must be >7</span><br />
+          <span id="lettercheck">x atleast 1 letter</span><br />
+          <span id="digitcheck">x atleast 1 digit</span><br />
+          <span id="specialchar">x atleast 1 special character</span><br />
+        </div>
+        <input
+          id="confirm-password"
+          type="text"
+          placeholder="Confirm Password"
+        />
+        <div class="checkbox">
+          <input type="checkbox" id="check" />
+          <label for="#">agree with Terms and Conditions</label>
+        </div>
+        <button type="submit">Submit</button>
+
+        <p id="errorMessage"></p>
+        <p>Already have an account <a href="/login">Login Now</a></p>
+      </form>
+    </div>
+
+    <script>
+      let form = document.getElementById("form");
+      let user = document.getElementById("username");
+      let name = document.getElementById("name");
+      let email = document.getElementById("email");
+      let password = document.getElementById("password");
+      let phone = document.getElementById("phone");
+      let confirm_password = document.getElementById("confirm-password");
+      let errorMessage = document.getElementById("errorMessage");
+      let check = document.getElementById("check");
+
+      let length = document.getElementById("lengthcheck");
+      let letter = document.getElementById("lettercheck");
+      let digit = document.getElementById("digitcheck");
+      let special = document.getElementById("specialchar");
+
+      password.addEventListener("input", function () {
+        let value = password.value;
+        if (value.length > 7) {
+          length.style.color = "green";
+        }
+        if (/[a-zA-Z]/.test(value)) {
+          letter.style.color = "green";
+        }
+        if (/[0-9]/.test(value)) {
+          digit.style.color = "green";
+        }
+        if (/[^a-zA-Z,0-9]/.test(value)) {
+          special.style.color = "green";
+        }
+      });
+
+      form.addEventListener("submit", async function (event) {
+        event.preventDefault();
+        errorMessage.innerHTML = "";
+
+        if (
+          user.value == "" ||
+          name.value == "" ||
+          email.value == "" ||
+          password.value == "" ||
+          confirm_password.value == ""
+        ) {
+          errorMessage.innerHTML =
+            "invalid Entities fill out all the required fields";
+        }
+        if (password.value < 7) {
+          length.innerHTML = "password must be > 7 chracters";
+        }
+        if (password.value != confirm_password.value) {
+          errorMessage.innerHTML = "passwords dont match";
+        }
+
+        if (check.checked == false) {
+          errorMessage.innerHTML = "check the terms and conditions";
+        }
+
+        // authentication
+        let signupData = {
+          fullname: name.value,
+          username: user.value,
+          email: email.value,
+          phone: phone.value,
+          password: password.value,
+        };
+
+        // sends request to flask
+        let response = await fetch("/signup", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(signupData),
+        });
+
+        let data = await response.json();
+
+        if (data.success) {
+          errorMessage.style.color = "green";
+          errorMessage.innerHTML = data.message;
+          form.reset();
+
+          setTimeout(function () {
+            window.location.href = "/login";
+          }, 1000);
+        } else {
+          errorMessage.style.color = "red";
+          errorMessage.innerHTML = data.message;
+        }
+      });
+    </script>
+  </body>
+</html>
