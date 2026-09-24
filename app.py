@@ -1,12 +1,11 @@
+import os
 from flask import Flask, request, jsonify, render_template, session, redirect, url_for
 import mysql.connector
 from werkzeug.security import generate_password_hash, check_password_hash
 import config
-import os
 
-template_dir = os.path.abspath(
-    os.path.join(os.path.dirname(__file__), "static", "templates")
-)
+# Yeh line templates folder ka exact absolute path set karti hai
+template_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), 'templates'))
 app = Flask(__name__, template_folder=template_dir)
 
 # Secret Key
@@ -35,7 +34,6 @@ def get_db_connection():
 @app.route("/")
 def home():
     return render_template("login.html")
-
 
 # =========================
 # Signup Page
@@ -402,50 +400,7 @@ def dashboard_stats():
 
 @app.route("/categories")
 def categories():
-    if "user_id" not in session:
-        return redirect(url_for("home"))
-
     return render_template("categories.html")
-
-
-@app.route("/stock")
-def stock():
-    if "user_id" not in session:
-        return redirect(url_for("home"))
-
-    return render_template("stock.html")
-
-
-@app.route("/sales")
-def sales():
-    if "user_id" not in session:
-        return redirect(url_for("home"))
-
-    return render_template("sales.html")
-
-
-@app.route("/sales-history")
-def sales_history():
-    if "user_id" not in session:
-        return redirect(url_for("home"))
-
-    return render_template("sales_history.html")
-
-
-@app.route("/customers")
-def customers():
-    if "user_id" not in session:
-        return redirect(url_for("home"))
-
-    return render_template("customers.html")
-
-
-@app.route("/settings")
-def settings():
-    if "user_id" not in session:
-        return redirect(url_for("home"))
-
-    return render_template("settings.html")
 
 
 # =========================
@@ -796,43 +751,43 @@ def products():
 # =========================
 
 
-@app.route("/api/products",methods=["GET"])
+@app.route("/api/products", methods=["GET"])
 def get_products():
 
-    db = get_db_connection
-    cursor=db.cursor(dictionary=True)
+    db = get_db_connection()
+    cursor = db.cursor(dictionary=True)
 
-    qurey="""
+    query = """
         SELECT
             products.id,
             products.product_name,
             products.sku,
             products.category_id,
-            categories.name As category_name,
-            products.purshase_price,
+            categories.name AS category_name,
+            products.purchase_price,
             products.selling_price,
             products.stock_quantity,
             products.minimum_stock,
             products.description,
-            products.created_at.
+            products.created_at,
             products.updated_at
-        FROM products 
-        INNER JOIN categories 
+        FROM products
+        INNER JOIN categories
             ON products.category_id = categories.id
-        ORDER BY product.id DESC 
+        ORDER BY products.id DESC
     """
 
     try:
 
-        cursor.execute(qurey)
+        cursor.execute(query)
 
-        products=cursor.fetchall()
+        products = cursor.fetchall()
 
         return jsonify(products), 200
-    
+
     except mysql.connector.Error as error:
 
-        return jsonify({"success":False, "message":str(error)}),500
+        return jsonify({"success": False, "message": str(error)}), 500
 
     finally:
 
@@ -942,15 +897,15 @@ def add_product():
 # =========================
 
 
-@app.route("/api/products/<int:product_id>" ,methods=["GET"])
+@app.route("/api/products/<int:product_id>", methods=["GET"])
 def get_product(product_id):
 
     db = get_db_connection()
     cursor = db.cursor(dictionary=True)
 
-    qurey = """
+    query = """
         SELECT
-            products_id,
+            products.id,
             products.product_name,
             products.sku,
             products.category_id,
@@ -965,24 +920,24 @@ def get_product(product_id):
         FROM products
         INNER JOIN categories
             ON products.category_id = categories.id
-        WHERE products.id=%s
+        WHERE products.id = %s
     """
 
     try:
 
-        cursor.execute(qurey,(product_id,))
+        cursor.execute(query, (product_id,))
 
         product = cursor.fetchone()
 
         if not product:
 
-            return jsonify({"success":False,"message":"product not found."}),404
+            return jsonify({"success": False, "message": "Product not found"}), 404
 
-        return jsonify({"success":True,"product":product}),200
+        return jsonify({"success": True, "product": product}), 200
 
     except mysql.connector.Error as error:
 
-        return jsonify({"success":False, "message":str(error)}), 500
+        return jsonify({"success": False, "message": str(error)}), 500
 
     finally:
 
@@ -990,6 +945,14 @@ def get_product(product_id):
         db.close()
 
 
-# =========================
-# Update Product
-# =========================
+
+
+
+
+
+
+
+
+
+if __name__ == "__main__":
+    app.run(debug=True)
